@@ -1,0 +1,43 @@
+﻿<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@LayoutType" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@LayoutType">
+            <p role="alert">Sorry, there's nothing at this address.</p>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code
+{
+
+    public Type LayoutType { get; set; } = typeof(MainLayout);
+
+    public void SetLayout(Type layout)
+    {
+        LayoutType = layout;
+        StateHasChanged();
+    }
+
+    public string LayoutName { get; set; } = "CustomLayout";
+
+    protected override Task OnInitializedAsync()
+    {
+        switch (LayoutName)
+        {
+            case "MainLayout":
+                SetLayout(typeof(MainLayout));
+                break;
+            case "CustomLayout":
+                SetLayout(typeof(CustomLayout));
+                break;
+            default:
+                SetLayout(typeof(MainLayout));
+                break;
+        }
+        return base.OnInitializedAsync();
+    }
+}
